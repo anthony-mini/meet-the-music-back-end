@@ -11,7 +11,8 @@ export default new DataSource({
   password: 'mypassword',
   database: 'meet-the-music',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  migrationsRun: true,
-  migrations: [__dirname + 'scripts/migrations/*{.ts,.js}'],
+  migrationsRun: false, // Disable auto-run migrations
+  migrations: [__dirname + '/src/migrations/*{.ts,.js}'],
+  schema: 'public', // Default schema to use for migrations
   migrationsTableName: 'migrations',
 });
