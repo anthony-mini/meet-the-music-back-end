@@ -3,7 +3,8 @@ run-name: ${{ github.actor }} is testing out GitGuardian Scan 🔐
 
 on:
   pull_request:
-  branches: '*'
+    branches:
+      - '*'
 
 jobs:
   scanning:
