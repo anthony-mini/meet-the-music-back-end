@@ -9,7 +9,7 @@ config();
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
-    await app.listen(+process.env.PORT || 3000);
+    await app.listen(+process.env.PORT);
   } catch (error) {
     Logger.error(
       `Failed to bootstrap the application`,
