@@ -20,9 +20,9 @@ import { ConfigModule } from '@nestjs/config';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: false,
       synchronize: true,
-      // TODO: Remove this in production
       ssl: {
         rejectUnauthorized: false,
+        ca: process.env.CA_CERT,
       },
     }),
   ],
