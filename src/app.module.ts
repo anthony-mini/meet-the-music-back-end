@@ -4,6 +4,20 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
+function getSSLConfig() {
+  const env = process.env.NODE_ENV;
+  let rejectUnauthorized = false;
+
+  if (env === 'staging' || env === 'production') {
+    rejectUnauthorized = true;
+  }
+
+  return {
+    rejectUnauthorized,
+    ca: process.env.CA_CERT,
+  };
+}
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,10 +34,7 @@ import { ConfigModule } from '@nestjs/config';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: false,
       synchronize: false,
-      ssl: {
-        rejectUnauthorized: false,
-        ca: process.env.CA_CERT,
-      },
+      ssl: getSSLConfig(),
     }),
   ],
   controllers: [AppController],
