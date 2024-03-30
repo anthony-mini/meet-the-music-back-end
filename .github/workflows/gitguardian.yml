@@ -1,0 +1,21 @@
+name: GitGuardian scan
+run-name: ${{ github.actor }} is testing out GitGuardian Scan 🔐
+
+on:
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  scanning:
+    name: GitGuardian scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for multiple commits to be scanned
+      - name: GitGuardian scan
+        uses: GitGuardian/ggshield-action@v1.25.0
+        env:
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
