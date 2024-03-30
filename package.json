@@ -16,7 +16,6 @@
     "db:cache:clear": "npx typeorm-ts-node-commonjs cache:clear -d migration-config.ts",
     "db:log": "npx typeorm-ts-node-commonjs schema:log -d migration-config.ts",
     "build": "nest build",
-    "nest:build": "npx nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
