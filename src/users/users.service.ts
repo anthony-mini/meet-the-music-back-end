@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcryptjs';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
@@ -36,15 +36,44 @@ export class UsersService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findByEmail(email: string): Promise<User> {
+    try {
+      return this.userRepository.findOneBy({ email });
+    } catch (error) {
+      throw new ConflictException(error.message, error.detail);
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findOne(id): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`User #${id} not found`);
+    }
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    try {
+      const salt = +process.env.HASH_SALT;
+      const hashedPassword = await bcrypt.hash(updateUserDto.password, salt);
+      await this.userRepository.update(id, {
+        ...updateUserDto,
+        password: hashedPassword,
+      });
+
+      return this.userRepository.update(id, updateUserDto);
+    } catch (error) {
+      throw error instanceof NotFoundException
+        ? error
+        : new ConflictException(error.message, error.detail);
+    }
+  }
+  async remove(id: number): Promise<{ message: string }> {
+    const done = await this.userRepository.delete(id);
+
+    if (done.affected != 1)
+      throw new NotFoundException(`User #${id} not found`);
+
+    return { message: 'User deleted successfully' };
   }
 }

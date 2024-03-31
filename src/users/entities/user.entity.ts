@@ -16,12 +16,26 @@ export class User {
   @Column({ name: 'email', unique: true })
   email: string;
 
-  @Exclude() // Exclude password from the response
+  @Exclude()
   @Column({ name: 'password' })
   password: string;
 
   @Column({ name: 'phone' })
   phone: string;
+
+  @Column({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @Column({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 
   @Column({
     type: 'enum',
