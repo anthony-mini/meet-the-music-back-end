@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsDefined } from 'class-validator';
+import { Role } from '../enums/role.enum';
 
 export class CreateUserDto {
   @IsEmail()
@@ -17,5 +18,5 @@ export class CreateUserDto {
   phone: string;
 
   @IsDefined()
-  role: string;
+  role: Role;
 }

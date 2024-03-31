@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcryptjs';
+import { ConflictException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
@@ -11,12 +13,27 @@ export class UsersService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    try {
+      const salt = +process.env.HASH_SALT;
+      const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+
+      return this.userRepository.save({
+        ...createUserDto,
+        password: hashedPassword,
+      });
+    } catch (error) {
+      throw new ConflictException(error.message, error.detail);
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(): Promise<Record<string, any>[]> {
+    try {
+      const users = await this.userRepository.find();
+      return users;
+    } catch (error) {
+      throw new ConflictException(error.message, error.detail);
+    }
   }
 
   findOne(id: number) {
