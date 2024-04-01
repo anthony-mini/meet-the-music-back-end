@@ -19,7 +19,7 @@ export class TokenController {
   @Get()
   async signIn(@Headers('Authorization') auth: string) {
     const args = auth && auth.split(' ');
-    if (args && args.length == 2 && args[0] == 'Bearer') {
+    if (args && args.length == 2 && args[0] == 'Basic') {
       const credentials = Buffer.from(args[1], 'base64')
         .toString('utf8')
         .split(':');
