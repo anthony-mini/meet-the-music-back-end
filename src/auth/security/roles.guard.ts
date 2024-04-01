@@ -4,6 +4,9 @@ import { ExecutionContext } from '@nestjs/common';
 import { IncomingMessage } from 'http';
 import { JwtService } from '@nestjs/jwt';
 
+import { config } from 'dotenv';
+config();
+
 @Injectable()
 export class RolesGuard {
   constructor(private reflector: Reflector) {}
@@ -12,6 +15,7 @@ export class RolesGuard {
     // Extract roles defined on controllers
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     if (!roles || !roles.length) {
+      // If no role is defined, allow no access
       return false;
     }
 

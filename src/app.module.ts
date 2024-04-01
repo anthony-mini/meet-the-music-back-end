@@ -36,7 +36,7 @@ function getSSLConfig() {
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: false,
       synchronize: false,
-      // ssl: getSSLConfig(),
+      ssl: getSSLConfig(),
     }),
     UsersModule,
     AuthModule,

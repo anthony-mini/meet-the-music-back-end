@@ -4,10 +4,13 @@ import {
   Headers,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../../users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
+
+import { config } from 'dotenv';
+config();
 
 @Controller('auth/token')
 export class TokenController {
@@ -28,9 +31,9 @@ export class TokenController {
       const user = await this.usersServices.findByEmail(email);
 
       if (user && (await bcrypt.compare(password, user.password))) {
-        const cr = new SignInDto();
-        cr.expires_in = 3600;
-        cr.access_token = this.jwtService.sign(
+        const signInData = new SignInDto();
+        signInData.expires_in = 3600;
+        signInData.access_token = this.jwtService.sign(
           {
             id: user.id,
             role: user.role,
@@ -40,7 +43,7 @@ export class TokenController {
             expiresIn: '1h',
           },
         );
-        return cr;
+        return signInData;
       } else {
         throw new UnauthorizedException('Invalid credentials');
       }
