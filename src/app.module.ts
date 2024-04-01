@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 function getSSLConfig() {
   const env = process.env.NODE_ENV;
@@ -38,6 +39,7 @@ function getSSLConfig() {
       ssl: getSSLConfig(),
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
