@@ -1,16 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Role } from '../enums/role.enum';
+import { Status } from '../enums/status.enum';
 import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({ name: 'id_user' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'first_name' })
+  @Column({ name: 'firstName' })
   firstName: string;
 
-  @Column({ name: 'last_name' })
+  @Column({ name: 'lastName' })
   lastName: string;
 
   @Column({ name: 'email', unique: true })
@@ -23,15 +24,18 @@ export class User {
   @Column({ name: 'phone' })
   phone: string;
 
+  @Column({ name: 'address' })
+  address: string;
+
   @Column({
-    name: 'created_at',
+    name: 'createdAt',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
 
   @Column({
-    name: 'updated_at',
+    name: 'updatedAt',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
@@ -39,9 +43,17 @@ export class User {
 
   @Column({
     type: 'enum',
-    name: 'role',
-    enum: ['admin', 'user'],
-    default: 'user',
+    name: 'Role',
+    enum: ['admin', 'artist', 'promoter', 'user'],
+    default: Role.USER,
   })
   role: Role;
+
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: ['active', 'inactive', 'suspended'],
+    default: Status.ACTIVE,
+  })
+  status: Status;
 }
