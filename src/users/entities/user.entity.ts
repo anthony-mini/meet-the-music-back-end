@@ -21,10 +21,10 @@ export class User {
   @Column({ name: 'password' })
   password: string;
 
-  @Column({ name: 'phone' })
+  @Column({ name: 'phone', nullable: true })
   phone: string;
 
-  @Column({ name: 'address' })
+  @Column({ name: 'address', nullable: true })
   address: string;
 
   @Column({
@@ -43,7 +43,7 @@ export class User {
 
   @Column({
     type: 'enum',
-    name: 'Role',
+    name: 'role',
     enum: ['admin', 'artist', 'promoter', 'user'],
     default: Role.USER,
   })

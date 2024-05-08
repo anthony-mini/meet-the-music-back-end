@@ -37,10 +37,12 @@ export class CreateTableUser1711959812741 implements MigrationInterface {
           {
             name: 'phone',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'address',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'createdAt',
