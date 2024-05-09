@@ -20,6 +20,7 @@ function getCorsOrigin() {
       origin = 'https://meetthemusic.fr';
       break;
     default:
+      origin = 'http://localhost:4200';
       break;
   }
 
