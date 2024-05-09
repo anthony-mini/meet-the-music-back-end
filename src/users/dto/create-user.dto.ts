@@ -1,22 +1,24 @@
-import { IsEmail, IsNotEmpty, IsDefined } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsDefined, IsEnum } from 'class-validator';
 import { Role } from '../enums/role.enum';
 
 export class CreateUserDto {
-  @IsEmail()
-  email: string;
-
-  @IsNotEmpty()
-  password: string;
-
-  @IsNotEmpty()
-  firstName: string;
-
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Last name is required' })
   lastName: string;
 
-  @IsNotEmpty()
-  phone: string;
+  @IsNotEmpty({ message: 'First name is required' })
+  firstName: string;
+
+  @IsEmail({}, { message: 'Invalid email format' })
+  email: string;
+
+  @IsNotEmpty({ message: 'Password is required' })
+  password: string;
 
   @IsDefined()
+  @IsEnum(Role, { message: 'Invalid role specified' })
   role: Role;
+
+  phone: string;
+
+  address: string;
 }
