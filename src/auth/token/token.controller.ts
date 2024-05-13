@@ -49,4 +49,14 @@ export class TokenController {
       }
     }
   }
+
+  @Get('me')
+  async getUserInformation(@Headers('Authorization') auth: string) {
+    const args = auth && auth.split(' ');
+    if (args && args.length == 2 && args[0] == 'Bearer') {
+      const token = args[1];
+      const data = this.jwtService.verify(token);
+      return this.usersServices.findOne(data.id);
+    }
+  }
 }
