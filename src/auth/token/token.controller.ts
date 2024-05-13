@@ -56,7 +56,12 @@ export class TokenController {
     if (args && args.length == 2 && args[0] == 'Bearer') {
       const token = args[1];
       const data = this.jwtService.verify(token);
-      return this.usersServices.findOne(data.id);
+      const user = await this.usersServices.findOne(data.id);
+      return {
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
     }
   }
 }
