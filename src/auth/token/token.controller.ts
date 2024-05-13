@@ -49,4 +49,20 @@ export class TokenController {
       }
     }
   }
+
+  @Get('me')
+  async getUserInformation(@Headers('Authorization') auth: string) {
+    const args = auth && auth.split(' ');
+    if (args && args.length == 2 && args[0] == 'Bearer') {
+      const token = args[1];
+      const data = this.jwtService.verify(token);
+      const user = await this.usersServices.findOne(data.id);
+      return {
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        initial: (user.firstName[0] + user.lastName[0]).toUpperCase(),
+      };
+    }
+  }
 }
