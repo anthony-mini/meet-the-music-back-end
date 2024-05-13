@@ -61,6 +61,7 @@ export class TokenController {
         role: user.role,
         firstName: user.firstName,
         lastName: user.lastName,
+        initial: (user.firstName[0] + user.lastName[0]).toUpperCase(),
       };
     }
   }
