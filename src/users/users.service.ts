@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +14,13 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const { role } = createUserDto;
+    const allowedRoles = ['artist', 'promoter', 'user'];
+
+    if (!allowedRoles.includes(role)) {
+      throw new ForbiddenException('You are not allowed to create this role');
+    }
+
     try {
       const salt = +process.env.HASH_SALT;
       const hashedPassword = await bcrypt.hash(createUserDto.password, salt);

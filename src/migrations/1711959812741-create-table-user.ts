@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Table } from 'typeorm/schema-builder/table/Table';
 import { Role } from '../users/enums/role.enum';
+import { Status } from '../users/enums/status.enum';
 
 export class CreateTableUser1711959812741 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -10,18 +11,18 @@ export class CreateTableUser1711959812741 implements MigrationInterface {
         schema: 'app',
         columns: [
           {
-            name: 'id_user',
+            name: 'id',
             type: 'int',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'first_name',
+            name: 'firstName',
             type: 'varchar',
           },
           {
-            name: 'last_name',
+            name: 'lastName',
             type: 'varchar',
           },
           {
@@ -36,22 +37,34 @@ export class CreateTableUser1711959812741 implements MigrationInterface {
           {
             name: 'phone',
             type: 'varchar',
+            isNullable: true,
           },
           {
-            name: 'created_at',
+            name: 'address',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'createdAt',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: 'updated_at',
+            name: 'updatedAt',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'role',
             type: 'enum',
-            enum: [Role.USER, Role.ADMIN],
+            enum: [Role.ADMIN, Role.ARTIST, Role.PROMOTER, Role.USER],
             default: `'${Role.USER}'`,
+          },
+          {
+            name: 'status',
+            type: 'enum',
+            enum: [Status.ACTIVE, Status.INACTIVE, Status.SUSPENDED],
+            default: `'${Status.ACTIVE}'`,
           },
         ],
       }),

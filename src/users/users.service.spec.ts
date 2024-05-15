@@ -44,6 +44,7 @@ describe('UsersService', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       phone: '1234567890',
+      address: 'Rue de pottier',
       role: Role.USER,
     };
 
