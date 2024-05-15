@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import * as cors from 'cors';
+import helmet from 'helmet';
 
 import { config } from 'dotenv';
 
@@ -30,6 +31,9 @@ function getCorsOrigin() {
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
+
+    // Helmet security [https://docs.nestjs.com/security/helmet]
+    app.use(helmet());
 
     // Extension activations
     app.useGlobalPipes(new ValidationPipe());
