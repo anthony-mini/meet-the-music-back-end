@@ -9,10 +9,15 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
 
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { UseGuards } from '@nestjs/common';
+
 import { config } from 'dotenv';
+
 config();
 
 @Controller('auth/token')
+@UseGuards(ThrottlerGuard) // Limit the number of requests globally
 export class TokenController {
   constructor(
     private usersServices: UsersService,
