@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Role } from './enums/role.enum';
 import { User } from './entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ThrottlerModule } from '@nestjs/throttler';
 describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
@@ -16,6 +17,14 @@ describe('UsersController', () => {
     };
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        ThrottlerModule.forRoot([
+          {
+            ttl: 600, // seconds (10 minutes)
+            limit: 100, // limit requests
+          },
+        ]),
+      ],
       controllers: [UsersController],
       providers: [
         UsersService,
