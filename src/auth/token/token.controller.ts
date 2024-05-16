@@ -4,6 +4,8 @@ import {
   Headers,
   UnauthorizedException,
   UseGuards,
+  Res,
+  Req,
 } from '@nestjs/common';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { JwtService } from '@nestjs/jwt';
@@ -13,6 +15,8 @@ import { SignInDto } from './dto/sign-in.dto';
 import { UsersService } from '../../users/users.service';
 
 import { config } from 'dotenv';
+
+import { Response, Request } from 'express';
 
 config();
 
@@ -26,7 +30,10 @@ export class TokenController {
 
   @Get()
   @Throttle({ default: { limit: 5, ttl: 300 } })
-  async signIn(@Headers('Authorization') auth: string) {
+  async signIn(
+    @Headers('Authorization') auth: string,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const args = auth && auth.split(' ');
     if (args && args.length == 2 && args[0] == 'Basic') {
       const credentials = Buffer.from(args[1], 'base64')
@@ -37,9 +44,7 @@ export class TokenController {
       const user = await this.usersServices.findByEmail(email);
 
       if (user && (await bcrypt.compare(password, user.password))) {
-        const signInData = new SignInDto();
-        signInData.expires_in = 3600;
-        signInData.access_token = this.jwtService.sign(
+        const token = this.jwtService.sign(
           {
             id: user.id,
             role: user.role,
@@ -49,6 +54,16 @@ export class TokenController {
             expiresIn: '1h',
           },
         );
+
+        response.cookie('access_token', token, {
+          httpOnly: true,
+          secure: false, // Assurez-vous que ce soit true si vous utilisez HTTPS
+          maxAge: 3600000, // 1 heure
+        });
+
+        const signInData = new SignInDto();
+        signInData.expires_in = 3600;
+        signInData.access_token = token;
         return signInData;
       } else {
         throw new UnauthorizedException('Invalid credentials');
@@ -57,10 +72,15 @@ export class TokenController {
   }
 
   @Get('me')
-  async getUserInformation(@Headers('Authorization') auth: string) {
-    const args = auth && auth.split(' ');
-    if (args && args.length == 2 && args[0] == 'Bearer') {
-      const token = args[1];
+  async getUserInformation(@Req() request: Request) {
+    // Retrieving the token from cookies passed in the request header
+    const token = request.cookies['access_token'];
+
+    if (!token) {
+      throw new UnauthorizedException('No token found in cookies');
+    }
+
+    try {
       const data = this.jwtService.verify(token);
       const user = await this.usersServices.findOne(data.id);
       return {
@@ -69,6 +89,8 @@ export class TokenController {
         lastName: user.lastName,
         initial: (user.firstName[0] + user.lastName[0]).toUpperCase(),
       };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }
