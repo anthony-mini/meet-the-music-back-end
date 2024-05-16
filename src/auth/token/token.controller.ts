@@ -59,8 +59,6 @@ export class TokenController {
     }
   }
 
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN, Role.USER, Role.ARTIST, Role.PROMOTER)
   @Get('me')
   async getUserInformation(@Headers('Authorization') auth: string) {
     const args = auth && auth.split(' ');
