@@ -57,8 +57,8 @@ export class TokenController {
         );
 
         response.cookie('access_token', token, {
-          httpOnly: false, // Make sure it's true if you're using HTTPS
-          secure: false, // true if in production
+          httpOnly: process.env.NODE_ENV === 'production', // true if in production
+          secure: process.env.NODE_ENV === 'production', // true if in production
           maxAge: 3600000, // 1 heure
         });
 
@@ -98,7 +98,7 @@ export class TokenController {
   @Post('logout')
   logout(@Res({ passthrough: true }) response: Response) {
     response.cookie('access_token', '', {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === 'production', // true if in production
       secure: process.env.NODE_ENV === 'production', // true if in production
       expires: new Date(0), // Expire immédiatement
     });
