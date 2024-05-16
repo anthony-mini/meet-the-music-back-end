@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Post,
   Headers,
   UnauthorizedException,
   UseGuards,
@@ -56,8 +57,8 @@ export class TokenController {
         );
 
         response.cookie('access_token', token, {
-          httpOnly: true,
-          secure: false, // Assurez-vous que ce soit true si vous utilisez HTTPS
+          httpOnly: false, // Make sure it's true if you're using HTTPS
+          secure: false, // true if in production
           maxAge: 3600000, // 1 heure
         });
 
@@ -92,5 +93,15 @@ export class TokenController {
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.cookie('access_token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // true if in production
+      expires: new Date(0), // Expire immédiatement
+    });
+    return { message: 'Logged out successfully' };
   }
 }
