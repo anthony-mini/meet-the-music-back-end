@@ -11,9 +11,6 @@ import * as bcrypt from 'bcryptjs';
 
 import { SignInDto } from './dto/sign-in.dto';
 import { UsersService } from '../../users/users.service';
-import { RolesGuard } from '../security/roles.guard';
-import { Role } from '../../users/enums/role.enum';
-import { Roles } from '../security/roles.decorator';
 
 import { config } from 'dotenv';
 
