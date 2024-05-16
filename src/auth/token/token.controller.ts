@@ -3,14 +3,17 @@ import {
   Get,
   Headers,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import { UsersService } from '../../users/users.service';
-import * as bcrypt from 'bcryptjs';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { JwtService } from '@nestjs/jwt';
-import { SignInDto } from './dto/sign-in.dto';
+import * as bcrypt from 'bcryptjs';
 
-import { ThrottlerGuard } from '@nestjs/throttler';
-import { UseGuards } from '@nestjs/common';
+import { SignInDto } from './dto/sign-in.dto';
+import { UsersService } from '../../users/users.service';
+import { RolesGuard } from '../security/roles.guard';
+import { Role } from '../../users/enums/role.enum';
+import { Roles } from '../security/roles.decorator';
 
 import { config } from 'dotenv';
 
@@ -25,6 +28,7 @@ export class TokenController {
   ) {}
 
   @Get()
+  @Throttle({ default: { limit: 5, ttl: 300 } })
   async signIn(@Headers('Authorization') auth: string) {
     const args = auth && auth.split(' ');
     if (args && args.length == 2 && args[0] == 'Basic') {
@@ -55,6 +59,8 @@ export class TokenController {
     }
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN, Role.USER, Role.ARTIST, Role.PROMOTER)
   @Get('me')
   async getUserInformation(@Headers('Authorization') auth: string) {
     const args = auth && auth.split(' ');
