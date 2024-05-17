@@ -61,6 +61,7 @@ export class TokenController {
           httpOnly: true, // true if in production or staging
           secure: true, // true if in production or staging
           maxAge: 3600000, // 1 heure
+          sameSite: 'lax',
         });
 
         const signInData = new SignInDto();
@@ -103,6 +104,7 @@ export class TokenController {
       httpOnly: true, // true if in production or staging
       secure: true, // true if in production or staging
       expires: new Date(0), // Expire immédiatement
+      sameSite: 'lax',
     });
     return { message: 'Logged out successfully' };
   }
