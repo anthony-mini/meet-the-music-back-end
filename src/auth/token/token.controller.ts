@@ -57,11 +57,9 @@ export class TokenController {
         );
 
         response.cookie('access_token', token, {
-          domain: ['production', 'staging'].includes(process.env.NODE_ENV)
-            ? process.env.COOKIE_DOMAIN
-            : undefined,
-          httpOnly: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
-          secure: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
+          domain: 'meetthemusic.fr', // 'localhost' or 'meetthemusic.fr
+          httpOnly: true, // true if in production or staging
+          secure: true, // true if in production or staging
           maxAge: 3600000, // 1 heure
         });
 
@@ -101,11 +99,9 @@ export class TokenController {
   @Post('logout')
   logout(@Res({ passthrough: true }) response: Response) {
     response.cookie('access_token', '', {
-      domain: ['production', 'staging'].includes(process.env.NODE_ENV)
-        ? process.env.COOKIE_DOMAIN
-        : undefined,
-      httpOnly: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
-      secure: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
+      domain: 'meetthemusic.fr', // 'localhost' or 'meetthemusic.fr
+      httpOnly: true, // true if in production or staging
+      secure: true, // true if in production or staging
       expires: new Date(0), // Expire immédiatement
     });
     return { message: 'Logged out successfully' };
