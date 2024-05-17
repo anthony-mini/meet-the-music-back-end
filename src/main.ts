@@ -5,6 +5,8 @@ import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import * as cors from 'cors';
 import helmet from 'helmet';
 
+import * as cookieParser from 'cookie-parser';
+
 import { config } from 'dotenv';
 
 config();
@@ -35,6 +37,9 @@ async function bootstrap() {
     // Helmet security [https://docs.nestjs.com/security/helmet]
     app.use(helmet());
 
+    // Use cookie-parser middleware
+    app.use(cookieParser());
+
     // Extension activations
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalInterceptors(
@@ -45,6 +50,7 @@ async function bootstrap() {
         origin: getCorsOrigin(),
         method: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true,
       }),
     );
 
