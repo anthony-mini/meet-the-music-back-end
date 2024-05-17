@@ -49,7 +49,12 @@ async function bootstrap() {
       cors({
         origin: getCorsOrigin(),
         method: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
+        allowedHeaders: [
+          'Content-Type',
+          'Authorization',
+          'Cookie',
+          'Set-Cookie',
+        ],
         credentials: true,
       }),
     );
