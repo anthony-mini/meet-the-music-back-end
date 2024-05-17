@@ -57,9 +57,7 @@ export class TokenController {
         );
 
         response.cookie('access_token', token, {
-          domain: ['production', 'staging'].includes(process.env.NODE_ENV)
-            ? process.env.COOKIE_DOMAIN
-            : undefined,
+          domain: 'meetthemusic.fr', // 'localhost' or 'meetthemusic.fr
           httpOnly: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
           secure: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
           maxAge: 3600000, // 1 heure
