@@ -58,7 +58,8 @@ export class TokenController {
 
         response.cookie('access_token', token, {
           httpOnly: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
-          secure: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging          maxAge: 3600000, // 1 heure
+          secure: ['production', 'staging'].includes(process.env.NODE_ENV), // true if in production or staging
+          maxAge: 3600000, // 1 heure
         });
 
         const signInData = new SignInDto();
