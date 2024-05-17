@@ -57,9 +57,9 @@ export class TokenController {
         );
 
         response.cookie('access_token', token, {
-          domain: 'meetthemusic.fr', // 'localhost' or 'meetthemusic.fr
-          httpOnly: true, // true if in production or staging
-          secure: true, // true if in production or staging
+          // domain: 'http://localhost:4200', // 'localhost' or 'meetthemusic.fr
+          httpOnly: false, // true if in production or staging
+          secure: false, // true if in production or staging
           maxAge: 3600000, // 1 heure
           sameSite: 'lax',
         });
@@ -100,9 +100,9 @@ export class TokenController {
   @Post('logout')
   logout(@Res({ passthrough: true }) response: Response) {
     response.cookie('access_token', '', {
-      domain: 'meetthemusic.fr', // 'localhost' or 'meetthemusic.fr
-      httpOnly: true, // true if in production or staging
-      secure: true, // true if in production or staging
+      // domain: 'meetthemusic.fr', // 'localhost' or 'meetthemusic.fr
+      httpOnly: false, // true if in production or staging
+      secure: false, // true if in production or staging
       expires: new Date(0), // Expire immédiatement
       sameSite: 'lax',
     });
