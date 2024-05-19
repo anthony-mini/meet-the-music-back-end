@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,16 +18,26 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { role } = createUserDto;
+    const regex = new RegExp(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*\*])[A-Za-z\d!@#$%^&*\*]{8,}$/,
+    );
+
+    const { role, password } = createUserDto;
     const allowedRoles = ['artist', 'promoter', 'user'];
 
     if (!allowedRoles.includes(role)) {
       throw new ForbiddenException('You are not allowed to create this role');
     }
 
+    if (!regex.test(password)) {
+      throw new BadRequestException(
+        'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)',
+      );
+    }
+
     try {
       const salt = +process.env.HASH_SALT;
-      const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
       return this.userRepository.save({
         ...createUserDto,
