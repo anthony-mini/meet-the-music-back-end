@@ -46,7 +46,7 @@ describe('UsersController', () => {
   it('should create a user', async () => {
     const dto: CreateUserDto = {
       email: 'test@test.com',
-      password: 'password',
+      password: 'Password12!',
       firstName: 'firstName',
       lastName: 'lastName',
       phone: '1234567890',
@@ -82,7 +82,7 @@ describe('UsersController', () => {
     const id = '1';
     const dto: CreateUserDto = {
       email: 'test@test.com',
-      password: 'password',
+      password: 'Password12!',
       firstName: 'firstName',
       lastName: 'lastName',
       phone: '1234567890',
