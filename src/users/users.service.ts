@@ -18,9 +18,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const regex = new RegExp(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*\*])[A-Za-z\d!@#$%^&*\*]{8,}$/,
-    );
+    const regex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 
     const { role, password } = createUserDto;
     const allowedRoles = ['artist', 'promoter', 'user'];
@@ -31,7 +29,7 @@ export class UsersService {
 
     if (!regex.test(password)) {
       throw new BadRequestException(
-        'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)',
+        '8 characters, 1 capital letter, 1 minimum number.',
       );
     }
 
