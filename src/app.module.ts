@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ArtistProfileModule } from './artist-profile/artist-profile.module';
 
 function getSSLConfig() {
   const env = process.env.NODE_ENV;
@@ -47,6 +48,7 @@ function getSSLConfig() {
     }),
     UsersModule,
     AuthModule,
+    ArtistProfileModule,
   ],
   controllers: [AppController],
   providers: [

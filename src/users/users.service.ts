@@ -2,6 +2,8 @@ import {
   ForbiddenException,
   Injectable,
   BadRequestException,
+  ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,18 +11,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcryptjs';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  generateAlias,
+  ensureAliasIsUnique,
+} from '../common/helpers/users.helpers';
+import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(ArtistProfile)
+    private artistProfileRepository: Repository<ArtistProfile>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const regex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 
-    const { role, password } = createUserDto;
+    const { role, password, firstName, lastName } = createUserDto;
     const allowedRoles = ['artist', 'promoter', 'user'];
 
     if (!allowedRoles.includes(role)) {
@@ -37,10 +45,31 @@ export class UsersService {
       const salt = +process.env.HASH_SALT;
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      return this.userRepository.save({
+      let alias = generateAlias(firstName, lastName);
+      alias = await ensureAliasIsUnique(alias, async (alias) => {
+        const user = await this.userRepository.findOne({ where: { alias } });
+        return !!user;
+      });
+
+      const newUser = this.userRepository.create({
         ...createUserDto,
         password: hashedPassword,
+        alias,
       });
+
+      const savedUser = await this.userRepository.save(newUser);
+
+      const user = await this.userRepository.findOne({
+        where: { id: savedUser.id },
+      });
+
+      const artistProfile = this.artistProfileRepository.create({
+        user: user, // Use entire user object
+      });
+
+      await this.artistProfileRepository.save(artistProfile);
+
+      return savedUser;
     } catch (error) {
       throw new ConflictException(error.message, error.detail);
     }
@@ -87,6 +116,7 @@ export class UsersService {
         : new ConflictException(error.message, error.detail);
     }
   }
+
   async remove(id: number): Promise<{ message: string }> {
     const done = await this.userRepository.delete(id);
 

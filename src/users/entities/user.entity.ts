@@ -1,21 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 import { Role } from '../enums/role.enum';
 import { Status } from '../enums/status.enum';
 import { Exclude } from 'class-transformer';
+import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
 
-@Entity()
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
+
+  @Column({ name: 'alias', unique: true })
+  alias: string;
+
+  @Column({ name: 'email', unique: true })
+  email: string;
 
   @Column({ name: 'firstName' })
   firstName: string;
 
   @Column({ name: 'lastName' })
   lastName: string;
-
-  @Column({ name: 'email', unique: true })
-  email: string;
 
   @Exclude()
   @Column({ name: 'password' })
@@ -26,6 +30,15 @@ export class User {
 
   @Column({ name: 'address', nullable: true })
   address: string;
+
+  @Column({ name: 'zipCode', nullable: true })
+  zipCode: string;
+
+  @Column({ name: 'city', nullable: true })
+  city: string;
+
+  @Column({ name: 'isVerifyEmail', default: true })
+  isVerifyEmail: boolean;
 
   @Column({
     name: 'createdAt',
@@ -56,4 +69,10 @@ export class User {
     default: Status.ACTIVE,
   })
   status: Status;
+
+  @OneToOne(() => ArtistProfile, (artistProfile) => artistProfile.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  artistProfile: ArtistProfile;
 }
