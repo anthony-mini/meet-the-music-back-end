@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 import { Role } from '../enums/role.enum';
 import { Status } from '../enums/status.enum';
 import { Exclude } from 'class-transformer';
-import { ArtistProfile } from 'src/artist-profile/entities/artist-profile.entity';
+import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
 
 @Entity()
 export class User {

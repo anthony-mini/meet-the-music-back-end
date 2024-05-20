@@ -1,5 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Table } from 'typeorm/schema-builder/table/Table';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { Role } from '../users/enums/role.enum';
 import { Status } from '../users/enums/status.enum';
 
@@ -18,17 +17,22 @@ export class CreateTableUser1711959812741 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
+            name: 'alias',
+            type: 'varchar',
+            isUnique: true,
+          },
+          {
+            name: 'email',
+            type: 'varchar',
+            isUnique: true,
+          },
+          {
             name: 'firstName',
             type: 'varchar',
           },
           {
             name: 'lastName',
             type: 'varchar',
-          },
-          {
-            name: 'email',
-            type: 'varchar',
-            isUnique: true,
           },
           {
             name: 'password',
@@ -43,6 +47,21 @@ export class CreateTableUser1711959812741 implements MigrationInterface {
             name: 'address',
             type: 'varchar',
             isNullable: true,
+          },
+          {
+            name: 'zipCode',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'city',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'isVerifyEmail',
+            type: 'boolean',
+            default: true,
           },
           {
             name: 'createdAt',
