@@ -14,14 +14,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './enums/role.enum';
 import { Roles } from '../auth/security/roles.decorator';
 import { RolesGuard } from '../auth/security/roles.guard';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('users')
+@UseGuards(ThrottlerGuard) // Limit the number of requests globally
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   // @UseGuards(RolesGuard)
   // @Roles(Role.ADMIN)
   @Post()
+  @Throttle({ default: { limit: 5, ttl: 300 } }) // Override the global limit
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

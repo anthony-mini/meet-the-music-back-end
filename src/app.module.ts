@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ArtistProfileModule } from './artist-profile/artist-profile.module';
 
 function getSSLConfig() {
   const env = process.env.NODE_ENV;
@@ -22,6 +24,12 @@ function getSSLConfig() {
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 600, // seconds (10 minutes)
+        limit: 100, // limit requests
+      },
+    ]),
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
@@ -40,8 +48,15 @@ function getSSLConfig() {
     }),
     UsersModule,
     AuthModule,
+    ArtistProfileModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'APP_GUARD',
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
