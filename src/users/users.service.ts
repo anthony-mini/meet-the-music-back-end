@@ -64,8 +64,7 @@ export class UsersService {
       });
 
       const artistProfile = this.artistProfileRepository.create({
-        user: user, // Utiliser l'objet utilisateur entier
-        description: '', // Ajoutez une description vide ou personnalisée
+        user: user, // Use entire user object
       });
 
       await this.artistProfileRepository.save(artistProfile);

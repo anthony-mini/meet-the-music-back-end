@@ -8,6 +8,6 @@ import { ArtistProfile } from 'src/artist-profile/entities/artist-profile.entity
 @Module({
   imports: [TypeOrmModule.forFeature([User, ArtistProfile])],
   controllers: [UsersController],
-  providers: [UsersService, TypeOrmModule],
+  providers: [UsersService],
 })
 export class UsersModule {}
