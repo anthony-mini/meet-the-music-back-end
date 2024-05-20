@@ -3,9 +3,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { SocialMedia } from '../../social-media/entites/social-media.entity';
 
 @Entity('artistProfile')
 export class ArtistProfile {
@@ -32,4 +34,7 @@ export class ArtistProfile {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @OneToMany(() => SocialMedia, (socialMedia) => socialMedia.artistProfile)
+  socialMedia: SocialMedia;
 }
