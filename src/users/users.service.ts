@@ -2,6 +2,8 @@ import {
   ForbiddenException,
   Injectable,
   BadRequestException,
+  ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,7 +11,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcryptjs';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  generateAlias,
+  ensureAliasIsUnique,
+} from '../common/helpers/users.helpers';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +25,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const regex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 
-    const { role, password } = createUserDto;
+    const { role, password, firstName, lastName } = createUserDto;
     const allowedRoles = ['artist', 'promoter', 'user'];
 
     if (!allowedRoles.includes(role)) {
@@ -37,9 +42,16 @@ export class UsersService {
       const salt = +process.env.HASH_SALT;
       const hashedPassword = await bcrypt.hash(password, salt);
 
+      let alias = generateAlias(firstName, lastName);
+      alias = await ensureAliasIsUnique(alias, async (alias) => {
+        const user = await this.userRepository.findOne({ where: { alias } });
+        return !!user;
+      });
+
       return this.userRepository.save({
         ...createUserDto,
         password: hashedPassword,
+        alias,
       });
     } catch (error) {
       throw new ConflictException(error.message, error.detail);
