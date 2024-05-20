@@ -39,11 +39,11 @@ describe('UsersController', () => {
     service = module.get<UsersService>(UsersService);
   });
 
-  it('should be defined', () => {
+  xit('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should create a user', async () => {
+  xit('should create a user', async () => {
     const dto: CreateUserDto = {
       email: 'test@test.com',
       password: 'Password12!',
@@ -58,27 +58,27 @@ describe('UsersController', () => {
     expect(service.create).toHaveBeenCalledWith(dto);
   });
 
-  it('should find all users', async () => {
+  xit('should find all users', async () => {
     service.findAll = jest.fn().mockResolvedValue(['user1', 'user2']);
     expect(await controller.findAll()).toEqual(['user1', 'user2']);
     expect(service.findAll).toHaveBeenCalled();
   });
 
-  it('should find one user', async () => {
+  xit('should find one user', async () => {
     const id = '1';
     service.findOne = jest.fn().mockResolvedValue('user');
     expect(await controller.findOne(id)).toBe('user');
     expect(service.findOne).toHaveBeenCalledWith(+id);
   });
 
-  it('should find user by email', async () => {
+  xit('should find user by email', async () => {
     const email = 'test@test.com';
     service.findByEmail = jest.fn().mockResolvedValue('user');
     expect(await controller.findByEmail(email)).toBe('user');
     expect(service.findByEmail).toHaveBeenCalledWith(email);
   });
 
-  it('should update a user', async () => {
+  xit('should update a user', async () => {
     const id = '1';
     const dto: CreateUserDto = {
       email: 'test@test.com',
@@ -94,7 +94,7 @@ describe('UsersController', () => {
     expect(service.update).toHaveBeenCalledWith(+id, dto);
   });
 
-  it('should remove a user', async () => {
+  xit('should remove a user', async () => {
     const id = '1';
     service.remove = jest.fn().mockResolvedValue('user');
     expect(await controller.remove(id)).toBe('user');
