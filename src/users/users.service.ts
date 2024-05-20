@@ -15,11 +15,14 @@ import {
   generateAlias,
   ensureAliasIsUnique,
 } from '../common/helpers/users.helpers';
+import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(ArtistProfile)
+    private artistProfileRepository: Repository<ArtistProfile>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -48,11 +51,26 @@ export class UsersService {
         return !!user;
       });
 
-      return this.userRepository.save({
+      const newUser = this.userRepository.create({
         ...createUserDto,
         password: hashedPassword,
         alias,
       });
+
+      const savedUser = await this.userRepository.save(newUser);
+
+      const user = await this.userRepository.findOne({
+        where: { id: savedUser.id },
+      });
+
+      const artistProfile = this.artistProfileRepository.create({
+        user: user, // Utiliser l'objet utilisateur entier
+        description: '', // Ajoutez une description vide ou personnalisée
+      });
+
+      await this.artistProfileRepository.save(artistProfile);
+
+      return savedUser;
     } catch (error) {
       throw new ConflictException(error.message, error.detail);
     }
@@ -99,6 +117,7 @@ export class UsersService {
         : new ConflictException(error.message, error.detail);
     }
   }
+
   async remove(id: number): Promise<{ message: string }> {
     const done = await this.userRepository.delete(id);
 

@@ -4,7 +4,7 @@ import { Status } from '../enums/status.enum';
 import { Exclude } from 'class-transformer';
 import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
 
-@Entity()
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

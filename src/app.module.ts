@@ -6,7 +6,6 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { ArtistProfileService } from './artist-profile/artist-profile.service';
 import { ArtistProfileModule } from './artist-profile/artist-profile.module';
 
 function getSSLConfig() {
@@ -58,7 +57,6 @@ function getSSLConfig() {
       provide: 'APP_GUARD',
       useClass: ThrottlerGuard,
     },
-    ArtistProfileService,
   ],
 })
 export class AppModule {}
