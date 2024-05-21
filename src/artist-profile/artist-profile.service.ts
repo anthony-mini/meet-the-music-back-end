@@ -24,7 +24,7 @@ export class ArtistProfileService {
 
     const artistProfile = await this.artistProfileRepository.findOne({
       where: { user: { id: user.id } },
-      relations: ['user'],
+      relations: ['user', 'socialMedia'],
     });
 
     if (!artistProfile) {
