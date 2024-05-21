@@ -13,7 +13,7 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
         schema: 'app',
         columns: [
           {
-            name: 'artistProfileId',
+            name: 'profileId',
             type: 'int',
             isPrimary: true,
           },
@@ -59,7 +59,7 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'app.socialMedia',
       new TableForeignKey({
-        columnNames: ['artistProfileId'],
+        columnNames: ['profileId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'app.artistProfile',
         onDelete: 'CASCADE',

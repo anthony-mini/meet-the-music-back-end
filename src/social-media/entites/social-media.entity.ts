@@ -28,7 +28,7 @@ export class SocialMedia {
   socialMediaName: SocialMediaName;
 
   @ManyToOne(() => ArtistProfile, (artistProfile) => artistProfile.socialMedia)
-  @JoinColumn({ name: 'artistProfileId' })
+  @JoinColumn({ name: 'profileId' })
   artistProfile: ArtistProfile;
   @PrimaryColumn()
   artistProfileId: number;
