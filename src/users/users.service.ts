@@ -14,6 +14,7 @@ import * as bcrypt from 'bcryptjs';
 import {
   generateAlias,
   ensureAliasIsUnique,
+  createUserProfile,
 } from '../common/helpers/users.helpers';
 import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
 import { EstablishmentProfile } from '../establishment-profile/entities/establishment-profile.entity';
@@ -69,33 +70,13 @@ export class UsersService {
         where: { id: savedUser.id },
       });
 
-      if (user.role === 'artist') {
-        const artistProfile = this.artistProfileRepository.create({
-          user: user,
-        });
+      await createUserProfile(
+        user,
+        this.artistProfileRepository,
+        this.establishmentProfileRepository,
+        this.socialMediaRepository,
+      );
 
-        await this.artistProfileRepository.save(artistProfile);
-
-        const socialMedia = this.socialMediaRepository.create({
-          artistProfile: artistProfile,
-        });
-
-        await this.socialMediaRepository.save(socialMedia);
-      } else if (user.role === 'promoter') {
-        const establishmentProfile = this.establishmentProfileRepository.create(
-          {
-            user: user,
-          },
-        );
-
-        await this.establishmentProfileRepository.save(establishmentProfile);
-
-        const socialMedia = this.socialMediaRepository.create({
-          establishmentProfile: establishmentProfile,
-        });
-
-        await this.socialMediaRepository.save(socialMedia);
-      }
       return savedUser;
     } catch (error) {
       throw new ConflictException(error.message, error.detail);

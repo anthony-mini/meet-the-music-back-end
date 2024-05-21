@@ -30,3 +30,49 @@ export const ensureAliasIsUnique = async (
   }
   return alias;
 };
+
+/**
+ * Create a user profile based on the user's role.
+ * @param user - The user object
+ * @param artistProfileRepository - The artist profile repository
+ * @param establishmentProfileRepository - The establishment profile repository
+ * @param socialMediaRepository - The social media repository
+ */
+
+export async function createUserProfile(
+  user,
+  artistProfileRepository,
+  establishmentProfileRepository,
+  socialMediaRepository,
+) {
+  switch (user.role) {
+    case 'artist': {
+      const artistProfile = artistProfileRepository.create({
+        user: user,
+      });
+
+      await artistProfileRepository.save(artistProfile);
+
+      const socialMedia = socialMediaRepository.create({
+        artistProfile: artistProfile,
+      });
+
+      await socialMediaRepository.save(socialMedia);
+      break;
+    }
+    case 'promoter': {
+      const establishmentProfile = establishmentProfileRepository.create({
+        user: user,
+      });
+
+      await establishmentProfileRepository.save(establishmentProfile);
+
+      const socialMedia = socialMediaRepository.create({
+        establishmentProfile: establishmentProfile,
+      });
+
+      await socialMediaRepository.save(socialMedia);
+      break;
+    }
+  }
+}
