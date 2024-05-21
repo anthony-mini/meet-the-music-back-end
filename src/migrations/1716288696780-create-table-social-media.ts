@@ -1,6 +1,11 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm';
 
-export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
+export class CreateTableSocialMedia1716288696780 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -8,9 +13,16 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
         schema: 'app',
         columns: [
           {
-            name: 'profileId',
+            name: 'artistProfileId',
             type: 'int',
             isPrimary: true,
+            isNullable: true,
+          },
+          {
+            name: 'establishmentProfileId',
+            type: 'int',
+            isPrimary: true,
+            isNullable: true,
           },
           {
             name: 'socialMediaName',
@@ -51,15 +63,26 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
     );
 
     // Add foreign key constraint from socialMedia to artistProfile
-    // await queryRunner.createForeignKey(
-    //   'app.socialMedia',
-    //   new TableForeignKey({
-    //     columnNames: ['profileId'],
-    //     referencedColumnNames: ['id'],
-    //     referencedTableName: 'app.artistProfile',
-    //     onDelete: 'CASCADE',
-    //   }),
-    // );
+    await queryRunner.createForeignKey(
+      'app.socialMedia',
+      new TableForeignKey({
+        columnNames: ['artistProfileId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'app.artistProfile',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    // Add foreign key constraint from socialMedia to establishmentProfile
+    await queryRunner.createForeignKey(
+      'app.socialMedia',
+      new TableForeignKey({
+        columnNames: ['establishmentProfileId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'app.establishmentProfile',
+        onDelete: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
