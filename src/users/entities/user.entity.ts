@@ -3,6 +3,7 @@ import { Role } from '../enums/role.enum';
 import { Status } from '../enums/status.enum';
 import { Exclude } from 'class-transformer';
 import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
+import { EstablishmentProfile } from '../../establishment-profile/entities/establishment-profile.entity';
 
 @Entity('user')
 export class User {
@@ -75,4 +76,14 @@ export class User {
     onDelete: 'CASCADE',
   })
   artistProfile: ArtistProfile;
+
+  @OneToOne(
+    () => EstablishmentProfile,
+    (establishmentProfile) => establishmentProfile.user,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+    },
+  )
+  establishmentProfile: EstablishmentProfile;
 }

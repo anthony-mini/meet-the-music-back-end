@@ -1,9 +1,4 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -56,15 +51,15 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
     );
 
     // Add foreign key constraint from socialMedia to artistProfile
-    await queryRunner.createForeignKey(
-      'app.socialMedia',
-      new TableForeignKey({
-        columnNames: ['profileId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'app.artistProfile',
-        onDelete: 'CASCADE',
-      }),
-    );
+    // await queryRunner.createForeignKey(
+    //   'app.socialMedia',
+    //   new TableForeignKey({
+    //     columnNames: ['profileId'],
+    //     referencedColumnNames: ['id'],
+    //     referencedTableName: 'app.artistProfile',
+    //     onDelete: 'CASCADE',
+    //   }),
+    // );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

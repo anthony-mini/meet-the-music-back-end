@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
 import { SocialMediaName } from '../enums/socialMediaName.enum';
-
+import { EstablishmentProfile } from '../../establishment-profile/entities/establishment-profile.entity';
 /**
  * Composite key for the SocialMedia entity that includes the socialMediaName and artistProfileId.
  */
@@ -32,6 +32,15 @@ export class SocialMedia {
   artistProfile: ArtistProfile;
   @PrimaryColumn()
   artistProfileId: number;
+
+  @ManyToOne(
+    () => EstablishmentProfile,
+    (establishmentProfile) => establishmentProfile.socialMedia,
+  )
+  @JoinColumn({ name: 'profileId' })
+  establishmentProfile: EstablishmentProfile;
+  @PrimaryColumn()
+  establishmentProfileId: number;
 
   @Column({ name: 'url' })
   url: string;
