@@ -17,6 +17,7 @@ import {
 } from '../common/helpers/users.helpers';
 import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
 import { EstablishmentProfile } from '../establishment-profile/entities/establishment-profile.entity';
+import { SocialMedia } from '../social-media/entites/social-media.entity';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +27,8 @@ export class UsersService {
     private artistProfileRepository: Repository<ArtistProfile>,
     @InjectRepository(EstablishmentProfile)
     private establishmentProfileRepository: Repository<EstablishmentProfile>,
+    @InjectRepository(SocialMedia)
+    private socialMediaRepository: Repository<SocialMedia>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -72,6 +75,12 @@ export class UsersService {
         });
 
         await this.artistProfileRepository.save(artistProfile);
+
+        const socialMedia = this.socialMediaRepository.create({
+          artistProfile: artistProfile,
+        });
+
+        await this.socialMediaRepository.save(socialMedia);
       } else if (user.role === 'promoter') {
         const establishmentProfile = this.establishmentProfileRepository.create(
           {
@@ -80,6 +89,12 @@ export class UsersService {
         );
 
         await this.establishmentProfileRepository.save(establishmentProfile);
+
+        const socialMedia = this.socialMediaRepository.create({
+          establishmentProfile: establishmentProfile,
+        });
+
+        await this.socialMediaRepository.save(socialMedia);
       }
       return savedUser;
     } catch (error) {
