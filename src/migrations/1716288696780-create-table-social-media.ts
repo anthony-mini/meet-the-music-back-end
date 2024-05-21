@@ -3,9 +3,10 @@ import {
   QueryRunner,
   Table,
   TableForeignKey,
+  TableUnique,
 } from 'typeorm';
 
-export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
+export class CreateTableSocialMedia1716288696780 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -13,9 +14,21 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
         schema: 'app',
         columns: [
           {
-            name: 'artistProfileId',
+            name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'artistProfileId',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'establishmentProfileId',
+            type: 'int',
+            isNullable: true,
           },
           {
             name: 'socialMediaName',
@@ -33,7 +46,7 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
               'SPOTIFY',
               'SOUNDCLOUD',
             ],
-            isPrimary: true,
+            isNullable: true,
           },
           {
             name: 'url',
@@ -63,6 +76,32 @@ export class CreateSocialMediaTable1716234116511 implements MigrationInterface {
         referencedColumnNames: ['id'],
         referencedTableName: 'app.artistProfile',
         onDelete: 'CASCADE',
+      }),
+    );
+
+    // Add foreign key constraint from socialMedia to establishmentProfile
+    await queryRunner.createForeignKey(
+      'app.socialMedia',
+      new TableForeignKey({
+        columnNames: ['establishmentProfileId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'app.establishmentProfile',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    // Add unique constraints to ensure unique combinations
+    await queryRunner.createUniqueConstraint(
+      'app.socialMedia',
+      new TableUnique({
+        columnNames: ['socialMediaName', 'artistProfileId'],
+      }),
+    );
+
+    await queryRunner.createUniqueConstraint(
+      'app.socialMedia',
+      new TableUnique({
+        columnNames: ['socialMediaName', 'establishmentProfileId'],
       }),
     );
   }

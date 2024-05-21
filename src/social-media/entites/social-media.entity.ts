@@ -1,12 +1,35 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
 import { SocialMediaName } from '../enums/socialMediaName.enum';
+import { EstablishmentProfile } from '../../establishment-profile/entities/establishment-profile.entity';
 
-/**
- * Composite key for the SocialMedia entity that includes the socialMediaName and artistProfileId.
- */
 @Entity('socialMedia')
 export class SocialMedia {
+  @PrimaryGeneratedColumn({ name: 'id' })
+  id: number;
+
+  @ManyToOne(
+    () => ArtistProfile,
+    (artistProfile) => artistProfile.socialMedia,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'profileId' })
+  artistProfile: ArtistProfile;
+
+  @ManyToOne(
+    () => EstablishmentProfile,
+    (establishmentProfile) => establishmentProfile.socialMedia,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'profileId' })
+  establishmentProfile: EstablishmentProfile;
+
   @Column({
     name: 'socialMediaName',
     type: 'enum',
@@ -23,17 +46,11 @@ export class SocialMedia {
       SocialMediaName.SPOTIFY,
       SocialMediaName.SOUNDCLOUD,
     ],
+    nullable: true,
   })
-  @PrimaryColumn()
   socialMediaName: SocialMediaName;
 
-  @ManyToOne(() => ArtistProfile, (artistProfile) => artistProfile.socialMedia)
-  @JoinColumn({ name: 'artistProfileId' })
-  artistProfile: ArtistProfile;
-  @PrimaryColumn()
-  artistProfileId: number;
-
-  @Column({ name: 'url' })
+  @Column({ name: 'url', nullable: true })
   url: string;
 
   @Column({
