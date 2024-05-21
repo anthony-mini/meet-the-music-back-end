@@ -34,34 +34,42 @@ export class CreateTableEstablishmentProfile1716288251061
           {
             name: 'capacity',
             type: 'int',
+            isNullable: true,
           },
           {
             name: 'address',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'phone',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'email',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'website',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'zipCode',
             type: 'int',
+            isNullable: true,
           },
           {
             name: 'city',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'type',
             type: 'enum',
+            isNullable: true,
             enum: [
               EstablishmentType.BAR,
               EstablishmentType.RESTAURANT,
