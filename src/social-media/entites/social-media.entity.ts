@@ -19,7 +19,7 @@ export class SocialMedia {
     (artistProfile) => artistProfile.socialMedia,
     { nullable: true },
   )
-  @JoinColumn({ name: 'profileId' })
+  @JoinColumn({ name: 'artistProfileId' })
   artistProfile: ArtistProfile;
 
   @ManyToOne(
@@ -27,7 +27,7 @@ export class SocialMedia {
     (establishmentProfile) => establishmentProfile.socialMedia,
     { nullable: true },
   )
-  @JoinColumn({ name: 'profileId' })
+  @JoinColumn({ name: 'establishmentProfileId' })
   establishmentProfile: EstablishmentProfile;
 
   @Column({

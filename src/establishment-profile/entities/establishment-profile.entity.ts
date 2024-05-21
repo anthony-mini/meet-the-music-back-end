@@ -19,41 +19,48 @@ export class EstablishmentProfile {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ name: 'description' })
+  @Column({ name: 'description', nullable: true })
   description: string;
 
   @Column({
     name: 'capacity',
+    nullable: true,
   })
   capacity: number;
 
   @Column({
     name: 'address',
+    nullable: true,
   })
   address: string;
 
   @Column({
     name: 'phone',
+    nullable: true,
   })
   phone: string;
 
   @Column({
     name: 'email',
+    nullable: true,
   })
   email: string;
 
   @Column({
     name: 'website',
+    nullable: true,
   })
   website: string;
 
   @Column({
     name: 'zipCode',
+    nullable: true,
   })
   zipCode: number;
 
   @Column({
     name: 'city',
+    nullable: true,
   })
   city: string;
 
