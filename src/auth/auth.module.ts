@@ -6,13 +6,14 @@ import { UsersService } from 'src/users/users.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
+import { EstablishmentProfile } from 'src/establishment-profile/entities/establishment-profile.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
-    TypeOrmModule.forFeature([User, ArtistProfile]),
+    TypeOrmModule.forFeature([User, ArtistProfile, EstablishmentProfile]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: {

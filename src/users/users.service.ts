@@ -16,6 +16,7 @@ import {
   ensureAliasIsUnique,
 } from '../common/helpers/users.helpers';
 import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
+import { EstablishmentProfile } from '../establishment-profile/entities/establishment-profile.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +24,8 @@ export class UsersService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(ArtistProfile)
     private artistProfileRepository: Repository<ArtistProfile>,
+    @InjectRepository(EstablishmentProfile)
+    private establishmentProfileRepository: Repository<EstablishmentProfile>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -63,12 +66,21 @@ export class UsersService {
         where: { id: savedUser.id },
       });
 
-      const artistProfile = this.artistProfileRepository.create({
-        user: user, // Use entire user object
-      });
+      if (user.role === 'artist') {
+        const artistProfile = this.artistProfileRepository.create({
+          user: user,
+        });
 
-      await this.artistProfileRepository.save(artistProfile);
+        await this.artistProfileRepository.save(artistProfile);
+      } else if (user.role === 'promoter') {
+        const establishmentProfile = this.establishmentProfileRepository.create(
+          {
+            user: user,
+          },
+        );
 
+        await this.establishmentProfileRepository.save(establishmentProfile);
+      }
       return savedUser;
     } catch (error) {
       throw new ConflictException(error.message, error.detail);
