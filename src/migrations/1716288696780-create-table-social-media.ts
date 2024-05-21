@@ -3,6 +3,7 @@ import {
   QueryRunner,
   Table,
   TableForeignKey,
+  TableUnique,
 } from 'typeorm';
 
 export class CreateTableSocialMedia1716288696780 implements MigrationInterface {
@@ -13,15 +14,20 @@ export class CreateTableSocialMedia1716288696780 implements MigrationInterface {
         schema: 'app',
         columns: [
           {
-            name: 'artistProfileId',
+            name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'artistProfileId',
+            type: 'int',
             isNullable: true,
           },
           {
             name: 'establishmentProfileId',
             type: 'int',
-            isPrimary: true,
             isNullable: true,
           },
           {
@@ -40,7 +46,7 @@ export class CreateTableSocialMedia1716288696780 implements MigrationInterface {
               'SPOTIFY',
               'SOUNDCLOUD',
             ],
-            isPrimary: true,
+            isNullable: true,
           },
           {
             name: 'url',
@@ -81,6 +87,21 @@ export class CreateTableSocialMedia1716288696780 implements MigrationInterface {
         referencedColumnNames: ['id'],
         referencedTableName: 'app.establishmentProfile',
         onDelete: 'CASCADE',
+      }),
+    );
+
+    // Add unique constraints to ensure unique combinations
+    await queryRunner.createUniqueConstraint(
+      'app.socialMedia',
+      new TableUnique({
+        columnNames: ['socialMediaName', 'artistProfileId'],
+      }),
+    );
+
+    await queryRunner.createUniqueConstraint(
+      'app.socialMedia',
+      new TableUnique({
+        columnNames: ['socialMediaName', 'establishmentProfileId'],
       }),
     );
   }
