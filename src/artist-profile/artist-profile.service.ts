@@ -13,7 +13,9 @@ export class ArtistProfileService {
     private userRepository: Repository<User>,
   ) {}
 
-  async getArtistProfile(alias: string): Promise<ArtistProfile> {
+  async getArtistProfile(
+    alias: string,
+  ): Promise<{ artistProfile: ArtistProfile; initials: string }> {
     const user = await this.userRepository.findOne({
       where: { alias: alias },
     });
@@ -31,6 +33,8 @@ export class ArtistProfileService {
       throw new Error('Artist profile not found');
     }
 
-    return artistProfile;
+    const initials = (user.firstName[0] + user.lastName[0]).toUpperCase();
+
+    return { artistProfile, initials };
   }
 }
