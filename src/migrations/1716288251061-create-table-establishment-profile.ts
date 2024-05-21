@@ -4,6 +4,7 @@ import {
   Table,
   TableForeignKey,
 } from 'typeorm';
+import { EstablishmentType } from '../establishment-profile/enums/establishment-type.enum';
 
 export class CreateTableEstablishmentProfile1716288251061
   implements MigrationInterface
@@ -29,6 +30,46 @@ export class CreateTableEstablishmentProfile1716288251061
             name: 'description',
             type: 'text',
             isNullable: true,
+          },
+          {
+            name: 'capacity',
+            type: 'int',
+          },
+          {
+            name: 'address',
+            type: 'varchar',
+          },
+          {
+            name: 'phone',
+            type: 'varchar',
+          },
+          {
+            name: 'email',
+            type: 'varchar',
+          },
+          {
+            name: 'website',
+            type: 'varchar',
+          },
+          {
+            name: 'zipCode',
+            type: 'int',
+          },
+          {
+            name: 'city',
+            type: 'varchar',
+          },
+          {
+            name: 'type',
+            type: 'enum',
+            enum: [
+              EstablishmentType.BAR,
+              EstablishmentType.RESTAURANT,
+              EstablishmentType.CLUB,
+              EstablishmentType.PUB,
+              EstablishmentType.LOUNGE,
+              EstablishmentType.CAFE,
+            ],
           },
           {
             name: 'createdAt',

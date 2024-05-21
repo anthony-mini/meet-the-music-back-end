@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { SocialMedia } from '../../social-media/entites/social-media.entity';
+import { EstablishmentType } from '../enums/establishment-type.enum';
 
 @Entity('establishmentProfile')
 export class EstablishmentProfile {
@@ -20,6 +21,55 @@ export class EstablishmentProfile {
 
   @Column({ name: 'description' })
   description: string;
+
+  @Column({
+    name: 'capacity',
+  })
+  capacity: number;
+
+  @Column({
+    name: 'address',
+  })
+  address: string;
+
+  @Column({
+    name: 'phone',
+  })
+  phone: string;
+
+  @Column({
+    name: 'email',
+  })
+  email: string;
+
+  @Column({
+    name: 'website',
+  })
+  website: string;
+
+  @Column({
+    name: 'zipCode',
+  })
+  zipCode: number;
+
+  @Column({
+    name: 'city',
+  })
+  city: string;
+
+  @Column({
+    type: 'enum',
+    name: 'type',
+    enum: [
+      EstablishmentType.BAR,
+      EstablishmentType.RESTAURANT,
+      EstablishmentType.CLUB,
+      EstablishmentType.PUB,
+      EstablishmentType.LOUNGE,
+      EstablishmentType.CAFE,
+    ],
+  })
+  type: EstablishmentType;
 
   @Column({
     name: 'createdAt',
