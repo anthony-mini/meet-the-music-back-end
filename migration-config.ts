@@ -25,7 +25,7 @@ export default new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: process.env.DB_SCHEMA_DEFAULT,
-  ssl: getSSLConfig(),
+  ssl: false,
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   migrationsRun: false, // Disable auto-run migrations
   migrations: [__dirname + '/src/migrations/*{.ts,.js}'],

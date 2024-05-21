@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
@@ -12,10 +12,7 @@ export class SocialMedia {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: true })
-  url: string;
-
-  @ManyToMany(() => ArtistProfile, (artistProfile) => artistProfile.socialMedia)
+  @ManyToOne(() => ArtistProfile, (artistProfile) => artistProfile.socialMedia)
   @JoinColumn({ name: 'artistProfileId' })
   artistProfile: ArtistProfile;
 
