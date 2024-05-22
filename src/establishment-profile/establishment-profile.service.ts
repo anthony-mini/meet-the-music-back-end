@@ -1,29 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEstablishmentProfileDto } from './dto/create-establishment-profile.dto';
-import { UpdateEstablishmentProfileDto } from './dto/update-establishment-profile.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
+import { EstablishmentProfile } from './entities/establishment-profile.entity';
 
 @Injectable()
 export class EstablishmentProfileService {
-  create(createEstablishmentProfileDto: CreateEstablishmentProfileDto) {
-    return 'This action adds a new establishmentProfile';
-  }
+  constructor(
+    @InjectRepository(EstablishmentProfile)
+    private establishmentProfileRepository: Repository<EstablishmentProfile>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
-  findAll() {
-    return `This action returns all establishmentProfile`;
-  }
+  async getEstablishmentProfile(alias: string): Promise<EstablishmentProfile> {
+    const user = await this.userRepository.findOne({
+      where: { alias: alias },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} establishmentProfile`;
-  }
+    if (!user) {
+      throw new Error('User not found');
+    }
 
-  update(
-    id: number,
-    updateEstablishmentProfileDto: UpdateEstablishmentProfileDto,
-  ) {
-    return `This action updates a #${id} establishmentProfile`;
-  }
+    const establishmentProfile =
+      await this.establishmentProfileRepository.findOne({
+        where: { user: { id: user.id } },
+        relations: ['user', 'socialMedia'],
+      });
 
-  remove(id: number) {
-    return `This action removes a #${id} establishmentProfile`;
+    if (!establishmentProfile) {
+      throw new Error('Establishment profile not found');
+    }
+
+    return establishmentProfile;
   }
 }

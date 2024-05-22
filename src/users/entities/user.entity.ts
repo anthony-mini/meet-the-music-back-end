@@ -32,10 +32,10 @@ export class User {
   @Column({ name: 'address', nullable: true })
   address: string;
 
-  @Column({ name: 'zipCode', nullable: true })
+  @Column({ name: 'zipCode' })
   zipCode: string;
 
-  @Column({ name: 'city', nullable: true })
+  @Column({ name: 'city' })
   city: string;
 
   @Column({ name: 'isVerifyEmail', default: true })
