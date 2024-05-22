@@ -51,12 +51,10 @@ export class CreateTableUser1711959812741 implements MigrationInterface {
           {
             name: 'zipCode',
             type: 'varchar',
-            isNullable: true,
           },
           {
             name: 'city',
             type: 'varchar',
-            isNullable: true,
           },
           {
             name: 'isVerifyEmail',
