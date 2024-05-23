@@ -46,6 +46,8 @@ describe('UsersService', () => {
       phone: '1234567890',
       address: 'Rue de pottier',
       role: Role.USER,
+      zipCode: '75000',
+      city: 'Paris',
     };
 
     const user = new User();
