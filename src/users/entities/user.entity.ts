@@ -3,6 +3,7 @@ import { Role } from '../enums/role.enum';
 import { Status } from '../enums/status.enum';
 import { Exclude } from 'class-transformer';
 import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
+import { EstablishmentProfile } from '../../establishment-profile/entities/establishment-profile.entity';
 
 @Entity('user')
 export class User {
@@ -31,10 +32,10 @@ export class User {
   @Column({ name: 'address', nullable: true })
   address: string;
 
-  @Column({ name: 'zipCode', nullable: true })
+  @Column({ name: 'zipCode' })
   zipCode: string;
 
-  @Column({ name: 'city', nullable: true })
+  @Column({ name: 'city' })
   city: string;
 
   @Column({ name: 'isVerifyEmail', default: true })
@@ -75,4 +76,14 @@ export class User {
     onDelete: 'CASCADE',
   })
   artistProfile: ArtistProfile;
+
+  @OneToOne(
+    () => EstablishmentProfile,
+    (establishmentProfile) => establishmentProfile.user,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+    },
+  )
+  establishmentProfile: EstablishmentProfile;
 }

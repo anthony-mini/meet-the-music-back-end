@@ -51,6 +51,8 @@ describe('UsersController', () => {
       lastName: 'lastName',
       phone: '1234567890',
       address: 'Rue de pottier',
+      zipCode: '75000',
+      city: 'Paris',
       role: Role.USER,
     };
     service.create = jest.fn().mockResolvedValue('user');
@@ -87,6 +89,8 @@ describe('UsersController', () => {
       lastName: 'lastName',
       phone: '1234567890',
       address: 'Rue de pottier',
+      zipCode: '75000',
+      city: 'Paris',
       role: Role.USER,
     };
     service.update = jest.fn().mockResolvedValue('user');

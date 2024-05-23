@@ -18,6 +18,12 @@ export class CreateUserDto {
   @IsEnum(Role, { message: 'Invalid role specified' })
   role: Role;
 
+  @IsDefined()
+  zipCode: string;
+
+  @IsDefined()
+  city: string;
+
   phone: string;
 
   address: string;
