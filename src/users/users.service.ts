@@ -83,9 +83,27 @@ export class UsersService {
     }
   }
 
-  async findAll(): Promise<Record<string, any>[]> {
+  async findAll(limit: number): Promise<User[]> {
     try {
-      const users = await this.userRepository.find();
+      const users = await this.userRepository.find({
+        take: limit,
+      });
+      return users;
+    } catch (error) {
+      throw new ConflictException(error.message, error.detail);
+    }
+  }
+
+  async searchUsers(search: string): Promise<Record<string, any>[]> {
+    try {
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.firstName ILIKE :search', { search: `%${search}%` })
+        .orWhere('user.lastName ILIKE :search', { search: `%${search}%` })
+        .orWhere('user.email ILIKE :search', { search: `%${search}%` })
+        .andWhere('user.status = :status', { status: 'active' })
+        .getMany();
+
       return users;
     } catch (error) {
       throw new ConflictException(error.message, error.detail);

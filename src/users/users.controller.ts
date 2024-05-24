@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -30,10 +31,17 @@ export class UsersController {
   }
 
   @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ARTIST, Role.PROMOTER, Role.USER)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query('limit') limit: number) {
+    return this.usersService.findAll(limit);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ARTIST, Role.PROMOTER, Role.USER)
+  @Get('search/:query')
+  searchUsers(@Param('query') query: string) {
+    return this.usersService.searchUsers(query);
   }
 
   @UseGuards(RolesGuard)
