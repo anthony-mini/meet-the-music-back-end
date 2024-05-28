@@ -1,8 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { Role } from '../users/enums/role.enum';
-import { Status } from '../users/enums/status.enum';
-import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
+import { User } from '../../users/entities/user.entity';
+import { Role } from '../../users/enums/role.enum';
+import { Status } from '../../users/enums/status.enum';
+import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
 
 export class SeedingCreateArtist1716886147013 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

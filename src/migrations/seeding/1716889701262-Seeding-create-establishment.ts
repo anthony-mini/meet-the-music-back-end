@@ -1,9 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { EstablishmentProfile } from '../establishment-profile/entities/establishment-profile.entity';
-import { Status } from '../users/enums/status.enum';
-import { Role } from '../users/enums/role.enum';
-import { EstablishmentType } from '../establishment-profile/enums/establishment-type.enum';
+import { User } from '../../users/entities/user.entity';
+import { EstablishmentProfile } from '../../establishment-profile/entities/establishment-profile.entity';
+import { Status } from '../../users/enums/status.enum';
+import { Role } from '../../users/enums/role.enum';
+import { EstablishmentType } from '../../establishment-profile/enums/establishment-type.enum';
 
 export class SeedingCreateEstablishment1716889701262
   implements MigrationInterface
