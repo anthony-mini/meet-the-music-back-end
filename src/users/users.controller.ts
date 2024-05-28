@@ -39,9 +39,16 @@ export class UsersController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.ARTIST, Role.PROMOTER, Role.USER)
+  @Get('artists')
+  findAllArtists(@Query('limit') limit: number) {
+    return this.usersService.getArtistUsers(limit);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ARTIST, Role.PROMOTER, Role.USER)
   @Get('search/:query')
   searchUsers(@Param('query') query: string) {
-    return this.usersService.searchUsers(query);
+    return this.usersService.searchUsersAndEstablishment(query);
   }
 
   @UseGuards(RolesGuard)
