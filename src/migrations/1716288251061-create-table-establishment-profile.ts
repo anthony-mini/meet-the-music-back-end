@@ -27,6 +27,12 @@ export class CreateTableEstablishmentProfile1716288251061
             type: 'int',
           },
           {
+            name: 'name',
+            type: 'varchar',
+            isUnique: true,
+            isNullable: true, // TODO change to false
+          },
+          {
             name: 'description',
             type: 'text',
             isNullable: true,

@@ -19,6 +19,9 @@ export class EstablishmentProfile {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @Column({ name: 'name', unique: true })
+  name: string;
+
   @Column({ name: 'description', nullable: true })
   description: string;
 
