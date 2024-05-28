@@ -10,7 +10,7 @@ import { User } from '../../users/entities/user.entity';
 import { SocialMedia } from '../../social-media/entites/social-media.entity';
 import { EstablishmentType } from '../enums/establishment-type.enum';
 
-@Entity('establishmentProfile')
+@Entity({ name: 'establishmentProfile', schema: 'app' })
 export class EstablishmentProfile {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
