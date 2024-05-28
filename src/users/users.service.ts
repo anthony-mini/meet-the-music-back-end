@@ -116,6 +116,7 @@ export class UsersService {
         .orWhere('establishmentProfile.name ILIKE :search', {
           search: `%${search}%`,
         })
+        .take(6)
         .getMany();
 
       return users.map((user) => {

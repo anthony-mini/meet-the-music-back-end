@@ -9,7 +9,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { SocialMedia } from '../../social-media/entites/social-media.entity';
 
-@Entity('artistProfile')
+@Entity({ name: 'artistProfile', schema: 'app' })
 export class ArtistProfile {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
