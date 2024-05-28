@@ -239,6 +239,7 @@ export class SeedingCreateEstablishment1716889701262
           email: fakeEstablishment.email,
           firstName: fakeEstablishment.firstName,
           lastName: fakeEstablishment.lastName,
+          // ggignore: ignore this secret
           password: 'MegaPassword123',
           phone: fakeEstablishment.phone,
           address: fakeEstablishment.address,

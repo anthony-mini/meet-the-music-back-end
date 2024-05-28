@@ -1,0 +1,4 @@
+ignore-paths:
+  - 'src/migrations/seeding/*'
+ignore-secrets:
+  - 'MegaPassword123'

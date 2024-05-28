@@ -256,6 +256,7 @@ export class SeedingCreateArtist1716886147013 implements MigrationInterface {
           email: fakeArtist.email,
           firstName: fakeArtist.firstName,
           lastName: fakeArtist.lastName,
+          // ggignore: ignore this secret
           password: 'MegaPassword123',
           phone: '0123456789',
           address: '1 rue de la Musique',
