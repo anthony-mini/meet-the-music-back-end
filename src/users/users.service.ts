@@ -19,7 +19,7 @@ import {
 import { ArtistProfile } from '../artist-profile/entities/artist-profile.entity';
 import { EstablishmentProfile } from '../establishment-profile/entities/establishment-profile.entity';
 import { SocialMedia } from '../social-media/entites/social-media.entity';
-
+import { Role } from './enums/role.enum';
 @Injectable()
 export class UsersService {
   constructor(
@@ -83,9 +83,86 @@ export class UsersService {
     }
   }
 
-  async findAll(): Promise<Record<string, any>[]> {
+  async findAll(limit: number): Promise<User[]> {
     try {
-      const users = await this.userRepository.find();
+      const users = await this.userRepository.find({
+        take: limit,
+      });
+      return users;
+    } catch (error) {
+      throw new ConflictException(error.message, error.detail);
+    }
+  }
+
+  async searchUsersAndEstablishment(
+    search: string,
+  ): Promise<Record<string, any>> {
+    try {
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.artistProfile', 'artistProfile')
+        .leftJoinAndSelect('user.establishmentProfile', 'establishmentProfile')
+        .where(
+          '(user.firstName ILIKE :search OR user.lastName ILIKE :search) AND user.role = :role',
+          {
+            search: `%${search}%`,
+            role: 'artist',
+          },
+        )
+        .orWhere('user.alias ILIKE :search AND user.role = :role', {
+          search: `%${search}%`,
+          role: 'artist',
+        })
+        .orWhere('establishmentProfile.name ILIKE :search', {
+          search: `%${search}%`,
+        })
+        .take(6)
+        .getMany();
+
+      return users.map((user) => {
+        if (user.role === 'artist') {
+          return {
+            artistProfile: {
+              user: {
+                alias: user.alias,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                zipCode: user.zipCode,
+                city: user.city,
+                role: user.role,
+              },
+            },
+          };
+        } else if (user.role === 'promoter') {
+          return {
+            establishmentProfile: {
+              name: user.establishmentProfile.name,
+              user: {
+                alias: user.alias,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                zipCode: user.zipCode,
+                city: user.city,
+                role: user.role,
+              },
+            },
+          };
+        }
+      });
+    } catch (error) {
+      throw new ConflictException(error.message, error.detail);
+    }
+  }
+
+  async getArtistUsers(limit: number): Promise<User[]> {
+    try {
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.role = :role', { role: Role.ARTIST })
+        .andWhere('user.status = :status', { status: 'active' })
+        .take(limit)
+        .getMany();
+
       return users;
     } catch (error) {
       throw new ConflictException(error.message, error.detail);

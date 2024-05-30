@@ -9,7 +9,7 @@ import { ArtistProfile } from '../../artist-profile/entities/artist-profile.enti
 import { SocialMediaName } from '../enums/socialMediaName.enum';
 import { EstablishmentProfile } from '../../establishment-profile/entities/establishment-profile.entity';
 
-@Entity('socialMedia')
+@Entity({ name: 'socialMedia', schema: 'app' })
 export class SocialMedia {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

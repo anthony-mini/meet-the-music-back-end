@@ -9,6 +9,7 @@
     "db:init": "node scripts/postgres/dbInit.js",
     "db:drop": "npx typeorm-ts-node-commonjs schema:drop -d migration-config.ts && node scripts/postgres/dbDrop.js",
     "db:migrate": "npx typeorm-ts-node-commonjs migration:run -d migration-config.ts",
+    "db:seed": "npx typeorm-ts-node-commonjs migration:run -d seeding-config.ts",
     "db:migrate:create": "npx typeorm migration:create",
     "db:reinit": "npm run db:drop && npm run db:init && npm run db:migrate",
     "db:revert": "npx typeorm-ts-node-commonjs migration:revert -d migration-config.ts",

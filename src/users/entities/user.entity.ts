@@ -5,7 +5,7 @@ import { Exclude } from 'class-transformer';
 import { ArtistProfile } from '../../artist-profile/entities/artist-profile.entity';
 import { EstablishmentProfile } from '../../establishment-profile/entities/establishment-profile.entity';
 
-@Entity('user')
+@Entity({ name: 'user', schema: 'app' })
 export class User {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
